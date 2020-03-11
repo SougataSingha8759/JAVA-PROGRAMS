@@ -1,0 +1,105 @@
+import java.util.Scanner;
+public class BankAccount {
+    String name_of_depositer;
+    double account_no;
+    String typeOfAccount;
+    double balance_amount;
+
+public void setName_of_depositer(String name_of_depositer) {
+this.name_of_depositer = name_of_depositer;
+}
+
+
+    public void setAccount_no(double account_no) {
+        this.account_no = account_no;
+    }
+
+    public void setTypeOfAccount(String typeOfAccount) {
+        this.typeOfAccount = typeOfAccount;
+    }
+
+    public void setBalance_amount(double balance_amount) {
+        this.balance_amount = balance_amount;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance_amount += amount;
+        } else {
+            System.out.println("Entered amount is not possible to deposit..");
+        }
+    }
+
+    public void withDraw(double amount) {
+        if ((amount > 0 && this.balance_amount > 0)&&amount<this.balance_amount)
+        {
+            System.out.println(amount + " is now withdraws..");
+            this.balance_amount -= amount;
+        }
+        else if(amount>this.balance_amount||this.balance_amount<0)
+        {
+        System.out.println("Not possible withdraws..");
+        }
+    }
+
+    public void display() {
+        System.out.println("NAme of the depositor is: " + this.name_of_depositer);
+        System.out.println("Available Balance: " + this.balance_amount);
+    }
+   
+    public void AllDisplay()
+    {
+    System.out.println("NAme of the account holder: "+this.name_of_depositer);
+    System.out.println("Account No: "+this.account_no);
+    System.out.println("Account Type: "+this.typeOfAccount);
+         System.out.println("Available Balance:" + this.balance_amount);
+    }
+
+    public static void main(String[] args)
+    {
+        Scanner inp = new Scanner(System.in);
+        System.out.println(" * WELCOME TO SS BANK SERVICES LTD. **");
+        System.out.println();
+        System.out.println("Enter Your name: ");
+        String name = inp.nextLine();
+        BankAccount m1 = new BankAccount();
+        m1.setName_of_depositer(name);
+        System.out.println("Enter account no:");
+        double acc=inp.nextDouble();
+        m1.setAccount_no(acc);
+        m1.setBalance_amount();// Here You Can Pass Some Amount..
+        System.out.println("Enter Your Account Type: ");
+        String type = inp.next();
+        m1.setTypeOfAccount(type);
+        System.out.println("Do you wnat to deposit an amount: Enter 1 for Yes otherwise press 2");
+        int num = inp.nextInt();
+        if(num==1)
+       {
+    System.out.println("Enter an amount: ");
+    double amount = inp.nextDouble();
+    m1.deposit(amount);
+    m1.display();
+       }
+        else
+        {
+        m1.AllDisplay();
+        System.out.println("Thank You... ");
+        }
+        //
+        System.out.println("Do you wnat to withDraw an amount: Enter 1 for Yes otherwise press 2");
+        num = inp.nextInt();
+        if(num==1)
+       {
+    System.out.println("Enter an amount: ");
+    double amount = inp.nextDouble();
+    m1.withDraw(amount);
+    m1.AllDisplay();
+       }
+        else
+        {
+        m1.AllDisplay();
+        System.out.println("Thank You... ");
+        }
+    }
+
+}
