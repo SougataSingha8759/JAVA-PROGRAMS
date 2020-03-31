@@ -1,0 +1,135 @@
+package com.sougatasingha.corunastatus;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+public class MainActivity extends AppCompatActivity
+{
+    String country = "";
+    TextView textView;
+    boolean ch = true;
+    boolean ch1 = true;
+    EditText editText;
+    String p = "";
+    Button btn;
+    ImageView imageView3;
+    int image = 0;
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public String getData(String c) throws Exception
+    {
+        StringBuffer buffer = new StringBuffer();
+        String url ="https://www.worldometers.info/coronavirus/country/" + c + "/";
+        Document doc = Jsoup.connect(url).get();
+        Elements elements = doc.select("#maincounter-wrap");
+        elements.forEach((e)->{
+            String text = e.select("h1").text();
+            String content = e.select(".maincounter-number>span").text();
+            buffer.append("\n").append(text).append(" -> ").append(" ").append(content).append("\n");
+        });
+
+        return "    IN "+c.toUpperCase()+"\n"+buffer.toString();
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void checkStatus (View view) throws Exception
+    {
+        if (ch == true) {
+
+            Log.i("Check", "Pressed");
+
+
+            country = editText.getText().toString();
+            new Thread(() -> {
+                try {
+                    if(country.equals(country))
+                    {
+                        p="Please Enter Valid Input"+"\n"+"Otherwise website may not contain for this search...";
+                    }
+                    p = getData(country);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                runOnUiThread(() -> {
+
+                    textView.setText(p);
+                    textView.setVisibility(View.VISIBLE);
+                    ch = false;
+                    btn.setVisibility(View.INVISIBLE);
+
+                });
+            }).start();
+
+        }
+    }
+
+    public void cleanStatus (View view)
+    {
+        if (ch == false) {
+            Log.i("Clean", "Pressed");
+            textView.setVisibility(View.INVISIBLE);
+            ch = true;
+            btn.setVisibility(View.VISIBLE);
+            editText.setVisibility(View.VISIBLE);
+
+        }
+        if (image==1)
+        {
+            imageView3.setVisibility(View.INVISIBLE);
+            btn.setVisibility(View.VISIBLE);
+            editText.setVisibility(View.VISIBLE);
+            image=0;
+        }
+
+    }
+
+    public  void guideStatus(View view)
+    {
+        if(ch1 == true)
+        {
+            Log.i("Guide", "Tapped");
+            imageView3.setVisibility(View.VISIBLE);
+            btn.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.INVISIBLE);
+            editText.setVisibility(View.INVISIBLE);
+            ch1 = false;
+            image =1;
+        }
+        else
+        {
+            imageView3.setVisibility(View.INVISIBLE);
+            btn.setVisibility(View.VISIBLE);
+            editText.setVisibility(View.VISIBLE);
+            ch1 = true;
+            image=0;
+        }
+    }
+    public  void sourceStatus(View view)
+    {
+        Toast.makeText(this,"This all information about Corona Virus is from"+"\n"+"https://www.worldometers.info/coronavirus/"+"\n"+" You can Verify!"+"\n"+"If Some Information is not showing very sorry please check Internet.. Otherwise Website Problem.",Toast.LENGTH_LONG).show();
+
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editText = findViewById(R.id.editText);
+        textView = findViewById(R.id.textView);
+        btn = findViewById(R.id.checkButton);
+        imageView3 = findViewById(R.id.imageView3);
+    }
+}
